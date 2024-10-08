@@ -2,6 +2,8 @@ package com.ohgiraffers.section01.xmlconfig.view;
 
 import com.ohgiraffers.section01.xmlconfig.controller.MenuController;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
 
     public class MenuView {
@@ -43,9 +45,77 @@ import java.util.Scanner;
                     case 1 :
                         menuController.selectAllMenu();
                         break;
+                    case 2 :
+                        menuController.selectMenuByCode(inputMenuCode());
+                        break;
+                    case 3 :
+                        menuController.insertNewMenu(inputMenu());
+                        break;
+                    case 4 :
+                        menuController.modifyMenu(inputModifyMenu());
+                        break;
+                    case 5 :
+                        menuController.deleteMenu(deleteMenu());
+                        break;
                 }
 
             } while (true);
 
+        }
+
+        private static Map<String,String> deleteMenu() {
+            Scanner sc = new Scanner(System.in);
+            System.out.println("삭제할 메뉴의 코드를 입력해주세요");
+            String menuCode = sc.nextLine();
+
+            Map<String,String> parameter = new HashMap<>();
+            parameter.put("menuCode",menuCode);
+            return parameter;
+        }
+
+        private static Map<String,String> inputModifyMenu() {
+            Scanner sc = new Scanner(System.in);
+            System.out.println("수정할 메뉴의 코드를 입력해주세요");
+            String menuCode = sc.nextLine();
+            System.out.println("수정할 메뉴의 이름을 입력해주세요");
+            String name = sc.nextLine();
+            System.out.println("수정할 메뉴의 가격을 입력해주세요");
+            String price = sc.nextLine();
+            System.out.println("수정할 메뉴의 카테고리를 입력해주세요");
+            String category = sc.nextLine();
+
+            Map<String,String> parameter = new HashMap<>();
+            parameter.put("menuCode",menuCode);
+            parameter.put("name",name);
+            parameter.put("price",price);
+            parameter.put("category",category);
+            return parameter;
+        }
+
+        private static Map<String,String> inputMenu() {
+            Scanner sc = new Scanner(System.in);
+            System.out.println("새로운 메뉴의 이름을 입력해주세요");
+            String name = sc.nextLine();
+            System.out.println("새로운 메뉴의 가격을 입력해주세요");
+            String price = sc.nextLine();
+            System.out.println("새로운 메뉴의 카테고리를 입력해주세요");
+            String category = sc.nextLine();
+
+            Map<String,String> parameter = new HashMap<>();
+            parameter.put("name",name);
+            parameter.put("price",price);
+            parameter.put("category",category);
+
+            return parameter;
+        }
+
+        private static Map<String,String> inputMenuCode() {
+            Scanner sc = new Scanner(System.in);
+            System.out.println("검색할 메뉴의 코드를 입력해주세요");
+            String menuCode = sc.nextLine();
+
+            Map<String,String> parameter = new HashMap<>();
+            parameter.put("menuCode",menuCode);
+            return parameter;
         }
     }

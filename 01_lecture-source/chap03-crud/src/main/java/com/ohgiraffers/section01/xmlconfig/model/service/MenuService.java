@@ -1,5 +1,6 @@
 package com.ohgiraffers.section01.xmlconfig.model.service;
 
+import com.ohgiraffers.section01.xmlconfig.model.dao.MenuDAO;
 import com.ohgiraffers.section01.xmlconfig.model.dto.MenuDTO;
 import org.apache.ibatis.session.SqlSession;
 
@@ -18,14 +19,72 @@ public class MenuService {
      *   - SqlSession 닫기
      *  */
 
+    private final MenuDAO menuDAO;
+
+    public MenuService() {
+        this.menuDAO = new MenuDAO();
+    }
+
     public List<MenuDTO> selectAllMenu() {
+
         SqlSession sqlSession = getSqlSession();
 
-        List<MenuDTO> menuList = menuDAO.selectAllmenu(sqlSession);
+        // DAO 는 데이터베이스와 직접 소통하는 클래스이다.
+        // 따라서 소통을 하기 위해서는 통로 == Connection == SqlSession 이 필요하다.
+        List<MenuDTO> menuList = menuDAO.selectAllMenu(sqlSession);
 
         sqlSession.close();
 
         return menuList;
     }
 
+    public MenuDTO selectMenuByMenuCode(int code) {
+        SqlSession sqlSession = getSqlSession();
+
+        MenuDTO menu = menuDAO.selectMenuByMenuCode(sqlSession,code);
+
+        sqlSession.close();
+
+        return menu;
+    }
+
+    public boolean insertNewMenu(MenuDTO newMenu) {
+        SqlSession sqlSession = getSqlSession();
+
+        int result = menuDAO.insertNewMenu(sqlSession,newMenu);
+
+        if(result > 0){
+            sqlSession.commit();
+        }else
+            sqlSession.rollback();
+
+        // newMenu = menuDAO.insertNewMenu(sqlSession);
+        sqlSession.close();
+
+        return result > 0 ? true : false ;
+    }
+
+    public boolean modifyMenu(MenuDTO modifyMenu) {
+        SqlSession sqlSession = getSqlSession();
+        int result = menuDAO.updateMenu(sqlSession,modifyMenu);
+        if(result > 0){
+            sqlSession.commit();
+        }else
+            sqlSession.rollback();
+        sqlSession.close();
+
+        return result > 0 ? true : false ;
+    }
+
+    public boolean deleteByMenuCode(int code) {
+        SqlSession sqlSession = getSqlSession();
+        int result = menuDAO.deleteMenu(sqlSession,code);
+        if(result > 0){
+            sqlSession.commit();
+        }else
+            sqlSession.rollback();
+        sqlSession.close();
+
+        return result > 0 ? true : false ;
+    }
 }

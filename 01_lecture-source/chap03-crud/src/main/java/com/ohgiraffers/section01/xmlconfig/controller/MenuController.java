@@ -5,6 +5,7 @@ import com.ohgiraffers.section01.xmlconfig.model.service.MenuService;
 import com.ohgiraffers.section01.xmlconfig.view.PrintResult;
 
 import java.util.List;
+import java.util.Map;
 
 public class MenuController {
 
@@ -34,7 +35,61 @@ public class MenuController {
         if(menuList != null){
             printResult.printMenuList(menuList);
         }else
-            System.out.println("조회결과가 없습니다.");
+            printResult.printErrorMessage("selectList");
     }
 
+    public void selectMenuByCode(Map<String,String> parameter) {
+        int code = Integer.parseInt(parameter.get("menuCode"));
+        MenuDTO menu = menuService.selectMenuByMenuCode(code);
+        if(menu != null){
+            printResult.printMenu(menu);
+        }else
+            printResult.printErrorMessage("selectOne");
+
+    }
+
+    public void insertNewMenu(Map<String, String> parameter) {
+        String menuName = parameter.get("name");
+        int price = Integer.parseInt(parameter.get("price"));
+        int categoryCode = Integer.parseInt(parameter.get("category"));
+
+        MenuDTO newMenu = new MenuDTO();
+
+        newMenu.setMenuName(menuName);
+        newMenu.setMenuPrice(price);
+        newMenu.setCategoryCode(categoryCode);
+
+        if(menuService.insertNewMenu(newMenu)){
+            printResult.printSuccessMessage("insert");
+        }else
+            printResult.printErrorMessage("insert");
+    }
+
+    public void modifyMenu(Map<String, String> parameter) {
+        int code = Integer.parseInt(parameter.get("menuCode"));
+        String menuName = parameter.get("name");
+        int price = Integer.parseInt(parameter.get("price"));
+        int categoryCode = Integer.parseInt(parameter.get("category"));
+
+        MenuDTO modifyMenu = new MenuDTO();
+        modifyMenu.setMenuCode(code);
+        modifyMenu.setMenuName(menuName);
+        modifyMenu.setMenuPrice(price);
+        modifyMenu.setCategoryCode(categoryCode);
+
+        if(menuService.modifyMenu(modifyMenu)){
+            printResult.printSuccessMessage("update");
+        }else
+            printResult.printErrorMessage("update");
+
+
+    }
+
+    public void deleteMenu(Map<String, String> parameter) {
+        int code = Integer.parseInt(parameter.get("menuCode"));
+        if(menuService.deleteByMenuCode(code)){
+            printResult.printSuccessMessage("delete");
+        }else
+            printResult.printErrorMessage("delete");
+    }
 }

@@ -6,7 +6,11 @@
     <resultMap id="menuResultMap" type="com.ohgiraffers.section01.xmlconfig.model.dto.MenuDTO">
         <id property="menuCode" column="MENU_CODE"/>
         <result property="menuName" column="MENU_NAME"/>
+        <result property="menuPrice" column="MENU_PRICE"/>
+        <result property="categoryCode" column="CATEGORY_CODE"/>
+        <result property="orderableStatus" column="ORDERABLE_STATUS"/>
     </resultMap>
+
     <select id="selectAllMenu" resultMap="menuResultMap">
         SELECT
             MENU_CODE,
@@ -21,4 +25,43 @@
         ORDER BY
             MENU_CODE
     </select>
+
+
+    <select id="selectMenuByMenuCode" parameterType="_int" resultMap="menuResultMap">
+        SELECT
+            MENU_CODE,
+            MENU_NAME,
+            MENU_PRICE,
+            CATEGORY_CODE,
+            ORDERABLE_STATUS
+        FROM
+            TBL_MENU
+        WHERE
+            ORDERABLE_STATUS = 'Y' AND
+            MENU_CODE = #{code}
+    </select>
+
+    <select id="insertNewMenu" parameterType="com.ohgiraffers.section01.xmlconfig.model.dto.MenuDTO">
+        INSERT INTO TBL_MENU
+        (MENU_NAME, MENU_PRICE, CATEGORY_CODE, ORDERABLE_STATUS)
+        VALUES
+        (#{menuName},#{menuPrice},#{categoryCode},'Y')
+    </select>
+
+    <select id="updateMenu" parameterType="com.ohgiraffers.section01.xmlconfig.model.dto.MenuDTO">
+        UPDATE TBL_MENU
+        SET
+            MENU_NAME = #{menuName},
+            MENU_PRICE = #{menuPrice},
+            CATEGORY_CODE = #{categoryCode}
+        WHERE
+            MENU_CODE = #{menuCode}
+    </select>
+
+    <select id="deleteMenuByMenuCode" parameterType="_int">
+        DELETE FROM TBL_MENU
+        WHERE
+            MENU_CODE = #{code}
+    </select>
+
 </mapper>
